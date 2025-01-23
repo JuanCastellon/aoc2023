@@ -26,7 +26,6 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 	answer := 0
-	flag := -1
 
 	for scanner.Scan() {
 		//Getting line of input from file
@@ -45,6 +44,10 @@ func main() {
 		//Getting the game number
 		gameStr := reN.FindAllString(split[0], -1)
 		game := convert(gameStr[0])
+		fmt.Println("Game: ", game)
+
+		//Declaring max numbers
+		redMax, greenMax, blueMax := 0, 0, 0
 
 		//Looping through sub games, reds > 12, greens > 13, blues > 14
 		for i := 0; i < len(subGameAry); i++ {
@@ -53,36 +56,37 @@ func main() {
 				if strings.ContainsRune(numAry[j], 'r') {
 					temp := reN.FindAllString(numAry[j], -1)
 					number := convert(temp[0])
-					if number > 12 {
-						flag = 1
+					if redMax == 0 {
+						redMax = number
+					} else if redMax < number {
+						redMax = number
 					}
 				}
 				if strings.ContainsRune(numAry[j], 'g') {
 					temp := reN.FindAllString(numAry[j], -1)
 					number := convert(temp[0])
-					if number > 13 {
-						flag = 1
+					if greenMax == 0 {
+						greenMax = number
+					} else if greenMax < number {
+						greenMax = number
 					}
 				}
 				if strings.ContainsRune(numAry[j], 'b') {
 					temp := reN.FindAllString(numAry[j], -1)
 					number := convert(temp[0])
-					if number > 14 {
-						flag = 1
+					if blueMax == 0 {
+						blueMax = number
+					} else if blueMax < number {
+						blueMax = number
 					}
 				}
 			}
 		}
-
-		if flag == 1 {
-			fmt.Print("Game ", game)
-			fmt.Println(" is not possible.")
-		} else {
-			fmt.Print("Game ", game)
-			fmt.Println(" is possible.")
-			answer += game
-		}
-		flag = -1
+		fmt.Println("Red Max: ", redMax)
+		fmt.Println("Green Max: ", greenMax)
+		fmt.Println("Blue Max: ", blueMax)
+		power := redMax * greenMax * blueMax
+		answer += power
 	}
 	fmt.Println("Answer: ", answer)
 
